@@ -25,6 +25,7 @@ public class BankUI extends javax.swing.JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setTitle("Proyecto Banco");
+        this.tablaBanco.setEnabled(false);
         //cargarModeloTabla();
     }
 
