@@ -59,6 +59,7 @@ public class BankTextController {
             String[] split;
             //Recibe la linea del .txt correspondiente
             line = input.get(key);
+            System.out.println(line);
             //y lo divide en los elementos necesarios para mostrarlo en una tabla
             split = line.split(",");
             //colocandolos en la matriz output
@@ -66,9 +67,9 @@ public class BankTextController {
                 output[0][j] = split[j];
             }
             //acomoda todos los IDAccount en un solo elemento de la matriz
-            accounts = split[3];
-            for(j=6;j<split.length;j++){
-                accounts = accounts + ", " + split[j];
+            accounts = "";
+            for(j=3;j<split.length;j++){
+                accounts += split[j] + " - monto: " + split[j+1] + ", ";
                 j = j + 2;
             }
             output[0][3] = accounts;
