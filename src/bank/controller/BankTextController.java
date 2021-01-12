@@ -53,12 +53,18 @@ public class BankTextController {
         Hashtable<String,String> input = bankBuilder.bankHashReader("Bank.txt");
         String[][] output = { {" "," "," "," "}};
         //Si existe el elemento
-        if(input.containsKey(key)){
+        String newKey = key;
+        String[] parts = newKey.split("_");
+        String lastName = parts[0]; 
+        String name = parts[1];
+        newKey = name+lastName;
+        
+        if(input.containsKey(newKey)){
             String line;
             String accounts;
             String[] split;
             //Recibe la linea del .txt correspondiente
-            line = input.get(key);
+            line = input.get(newKey);
             //y lo divide en los elementos necesarios para mostrarlo en una tabla
             split = line.split(",");
             //colocandolos en la matriz output
