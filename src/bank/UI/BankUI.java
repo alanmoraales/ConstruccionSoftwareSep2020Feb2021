@@ -6,6 +6,9 @@
 package bank.UI;
 
 import bank.controller.BankTextController;
+
+import java.awt.Component;
+
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class BankUI extends javax.swing.JFrame {
 
     private DefaultTableModel modelo = new DefaultTableModel();
+    private boolean tablaCreada = false;
     /**
      * Creates new form Ui
      */
@@ -25,6 +29,10 @@ public class BankUI extends javax.swing.JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setTitle("Proyecto Banco");
+        this.tablaBanco.setEnabled(false);
+        this.jButton1.setText("Buscar");
+        this.jLabel2.setText("Clave");
+        this.jLabel3.setText("Clave: apellido_nombre. Ejemplo: Garcilazo_Juan");
         //cargarModeloTabla();
     }
 
@@ -68,7 +76,7 @@ public class BankUI extends javax.swing.JFrame {
 
         jLabel2.setText("Key");
 
-        jLabel3.setText("Key = FN + LN (Sin espacios)");
+        jLabel3.setText("Key = LN_N (Sin espacios)");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -162,24 +170,46 @@ public class BankUI extends javax.swing.JFrame {
     //Metodo que corre al presionar el boton. Busca un elemento en un Hashtable,
     //y lo coloca en una tabla
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    
         String key;
+        
         key = jTextField1.getText();
-        BankTextController control = new BankTextController(); 
-        //Llama a la funcion de controller que busca el elemento en el HashTable
-        String[][] table = control.getHashTable(key);
-        //Si el elemento existe, lo coloca en la tabla
-        if(table!=null){
-            cargarModeloTabla(table);
+        
+        if(checkKey(key)) {
+        	BankTextController control = new BankTextController(); 
+            //Llama a la funcion de controller que busca el elemento en el HashTable
+            String[][] table = control.getHashTable(key);
+            //Si el elemento existe, lo coloca en la tabla
+            if(table!=null){
+                cargarModeloTabla(table);
+            }
+            //Si el elemento no existe, crea una ventana mostrando que el elemento no existe
+            else{
+                JOptionPane.showMessageDialog(this, "Llave no encontrada, asegúrate que este primero Apellido_Nombre", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }else {
+        	Component frame = null;
+			JOptionPane.showMessageDialog(frame, "Necesitas Apellido_nombre");
+			
         }
-        //Si el elemento no existe, crea una ventana mostrando que el elemento no existe
-        else{
-            JOptionPane.showMessageDialog(this, "Key not found", "Error", JOptionPane.WARNING_MESSAGE);
-        }
+        
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     //Este metodo carga el modewlo la tabla
+    
+    public boolean checkKey(String key) {
+    	if(key.contains("_")) {
+    		return true;
+    		
+    	}else {
+			return false;
+    	}
+    	
+    }
     public void cargarModeloTabla(String[][] lista){
+        
         /*
         Cuando un JScrollPane contiene a un JTable, se pueden configurar para 
         que aparezcan las barras horizontal y vertical del scrollpane, 
@@ -191,13 +221,18 @@ public class BankUI extends javax.swing.JFrame {
         tablaBanco.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tablaBanco.doLayout();
 		
-		
-	//obtener nombres
-	String nombres[] = control.getHeader();
-	modelo.addColumn(nombres[0]);
-        modelo.addColumn(nombres[1]);
-        modelo.addColumn(nombres[2]);
-	
+
+        //obtener nombres
+        if(tablaCreada == false) {
+            String nombres[] = control.getHeader();
+            modelo.addColumn(nombres[0]);
+            modelo.addColumn(nombres[1]);
+            modelo.addColumn(nombres[2]);
+            modelo.addColumn(nombres[3]);
+            modelo.addColumn(nombres[4]);
+            tablaCreada = true;
+        }
+
         //Funcion que retornara la matriz de strings para actualizar la matriz
         int numFilas = lista.length;
         int numcolumnas = 0;
@@ -209,24 +244,29 @@ public class BankUI extends javax.swing.JFrame {
             }
         }
 		
-		
-        //Funcion Para agragar cuentas a las columnas de acuerdo a cuantas columnas se necesitaran
-        
-        int totalColumnas = numcolumnas - 3;//Num de columnas que faltan por nombrar
-        for(int j = 1; j<=totalColumnas; j++){
-            modelo.addColumn(nombres[3]);
-        }
+        numFilas = lista[0][3].split(",").length;
+
         //funcion para establecer el num de filas que abra en la tabla
         modelo.setNumRows(numFilas);
-        //funcion para introducir los valores a la tabla
-        numcolumnas = 0;
-        for(int i = 0; i<numFilas; i++){
-            numcolumnas = lista[i].length;
-            for(int j = 0; j<numcolumnas; j++){
-                modelo.setValueAt(lista[i][j], i, j);
+
+        //insertar todo menos cuentas  y saldos
+        for(int i = 0; i< 3; i++){
+            for(int j = 0; j < 3; j++){
+                modelo.setValueAt(lista[0][j], i, j);
             }
         }
+
+        //ahora si las cuentas y saldos
+        String balances[] = lista[0][5].split(", ");
+        String accounts[] = lista[0][3].split(", ");
         
+        for(int i = 0; i< 3; i++){
+            modelo.setValueAt(accounts[i], i, 4);
+        }
+
+        for(int i = 0; i< 3; i++){
+           modelo.setValueAt(balances[i], i, 3);
+        }
     }
 
 
