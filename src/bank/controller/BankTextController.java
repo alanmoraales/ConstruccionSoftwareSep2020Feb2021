@@ -39,7 +39,7 @@ public class BankTextController {
     }
     
     public String[] getHeader(){
-        String[] header = {"ID","First Name","Last Name","Accounts"};
+        String[] header = {"ID","Nombre","Apellido","Cuentas"};
         return header;
     }
     
