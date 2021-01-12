@@ -6,6 +6,9 @@
 package bank.UI;
 
 import bank.controller.BankTextController;
+
+import java.awt.Component;
+
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -73,7 +76,7 @@ public class BankUI extends javax.swing.JFrame {
 
         jLabel2.setText("Key");
 
-        jLabel3.setText("Key = FN + LN (Sin espacios)");
+        jLabel3.setText("Key = LN_N (Sin espacios)");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -167,23 +170,44 @@ public class BankUI extends javax.swing.JFrame {
     //Metodo que corre al presionar el boton. Busca un elemento en un Hashtable,
     //y lo coloca en una tabla
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    
         String key;
+        
         key = jTextField1.getText();
-        BankTextController control = new BankTextController(); 
-        //Llama a la funcion de controller que busca el elemento en el HashTable
-        String[][] table = control.getHashTable(key);
-        //Si el elemento existe, lo coloca en la tabla
-        if(table!=null){
-            cargarModeloTabla(table);
+        
+        if(checkKey(key)) {
+        	BankTextController control = new BankTextController(); 
+            //Llama a la funcion de controller que busca el elemento en el HashTable
+            String[][] table = control.getHashTable(key);
+            //Si el elemento existe, lo coloca en la tabla
+            if(table!=null){
+                cargarModeloTabla(table);
+            }
+            //Si el elemento no existe, crea una ventana mostrando que el elemento no existe
+            else{
+                JOptionPane.showMessageDialog(this, "Llave no encontrada, asegúrate que este primero Apellido_Nombre", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }else {
+        	Component frame = null;
+			JOptionPane.showMessageDialog(frame, "Necesitas Apellido_nombre");
+			
         }
-        //Si el elemento no existe, crea una ventana mostrando que el elemento no existe
-        else{
-            JOptionPane.showMessageDialog(this, "Key not found", "Error", JOptionPane.WARNING_MESSAGE);
-        }
+        
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     //Este metodo carga el modewlo la tabla
+    
+    public boolean checkKey(String key) {
+    	if(key.contains("_")) {
+    		return true;
+    		
+    	}else {
+			return false;
+    	}
+    	
+    }
     public void cargarModeloTabla(String[][] lista){
         
         /*
