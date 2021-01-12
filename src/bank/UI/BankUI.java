@@ -26,6 +26,10 @@ public class BankUI extends javax.swing.JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setTitle("Proyecto Banco");
+        this.tablaBanco.setEnabled(false);
+        this.jButton1.setText("Buscar");
+        this.jLabel2.setText("Clave");
+        this.jLabel3.setText("Clave: apellido_nombre. Ejemplo: Garcilazo_Juan");
         //cargarModeloTabla();
     }
 
@@ -229,15 +233,15 @@ public class BankUI extends javax.swing.JFrame {
         }
 
         //ahora si las cuentas y saldos
-        String balances[] = lista[0][4].split(", ");
+        String balances[] = lista[0][5].split(", ");
         String accounts[] = lista[0][3].split(", ");
         
         for(int i = 0; i< 3; i++){
-            modelo.setValueAt(accounts[i], i, 3);
+            modelo.setValueAt(accounts[i], i, 4);
         }
 
         for(int i = 0; i< 3; i++){
-           modelo.setValueAt(balances[i], i, 4);
+           modelo.setValueAt(balances[i], i, 3);
         }
     }
 
